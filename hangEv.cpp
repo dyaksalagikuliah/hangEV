@@ -143,35 +143,26 @@ void drawHangman(int wrongGuesses) {
         gotoxy(5, i); printf("||");
     }
     gotoxy(5, 3); printf("||==============T================");
-
+    
+    gotoxy(21,4); printf("|");
 
     switch (wrongGuesses) {
         case 6: // Kaki kanan
-            gotoxy(45, 22); printf("o|");
-            gotoxy(45, 21); printf("|");
-            gotoxy(45, 20); printf("|");
+            gotoxy(19, 11); printf("| \\");
         case 5: // Kaki kiri
-            gotoxy(41, 22); printf("|o|");
-            gotoxy(41, 21); printf("| |");
-            gotoxy(41, 20); printf("| |");
+            gotoxy(17, 11); printf("/ |");
         case 4: // Tangan kanan
-            gotoxy(45, 19); printf("w|");
-            gotoxy(45, 18); printf("|");
-            gotoxy(45, 17); printf("|");
-            gotoxy(45, 16); printf("_");
+            gotoxy(20, 9); printf("\\_");
         case 3: // Tangan kiri
-            gotoxy(39, 19); printf("|w");
-            gotoxy(39, 18); printf("| |");
-            gotoxy(39, 17); printf("| |");
-            gotoxy(39, 16); printf(" _");
+            gotoxy(16, 9); printf("_/");
         case 2: // Badan
-            gotoxy(41, 17); printf("|   |");
-            gotoxy(41, 18); printf("|   |");
-            gotoxy(41, 19); printf("|___|");
+            gotoxy(18, 9); printf("|      |");
+            gotoxy(18, 10); printf("|     |");
+            gotoxy(18, 7); printf("|     |");
+
         case 1: // Kepala
-            gotoxy(41, 14); printf("~+-+~");
-            gotoxy(41, 15); printf("|E V|");
-            gotoxy(41, 16); printf("|_^_|");
+            gotoxy(20, 6); printf("|___|");
+            gotoxy(19, 7); printf("");
             break;
     }
 }
