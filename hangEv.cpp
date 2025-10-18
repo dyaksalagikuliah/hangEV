@@ -138,36 +138,49 @@ void drawHangman(int wrongGuesses) {
     }
 
     // Tiang gantungan (selalu ada)
-    gotoxy(5, 14); printf("=================================");
-    for(int i = 3; i < 14; i++){
-        gotoxy(5, i); printf("||");
+    gotoxy(5, 18); printf("=================================");
+    for(int i = 3; i < 18; i++){
     }
     gotoxy(5, 3); printf("||==============T================");
+    
     
     gotoxy(21,4); printf("|");
     gotoxy(21,5); printf("|");
     gotoxy(21,6); printf("|");
-    gotoxy(21,7); printf("|");
+    // gotoxy(21,7); printf("|");
 
 
     switch (wrongGuesses) {
         case 6: // Kaki kanan
-            gotoxy(19, 11); printf("| \\");
+            gotoxy(22, 13); printf(" |");
+            gotoxy(22, 14); printf(" |");
+            gotoxy(22, 15); printf("o|");
+            Sleep(1000);
         case 5: // Kaki kiri
-            gotoxy(17, 11); printf("/ |");
+            gotoxy(19,13);printf("| |");
+            gotoxy(19,14);printf("| |");
+            gotoxy(19,15);printf("|o|");
+            // Sleep(1000);
         case 4: // Tangan kanan
-            gotoxy(20, 9); printf("\\_");
+            gotoxy(22, 12); printf("w|");
+            gotoxy(22, 10); printf("|");
+            gotoxy(22, 11); printf("|");
+            gotoxy(22, 9); printf("_");
         case 3: // Tangan kiri
-            gotoxy(16, 9); printf("_/");
+            gotoxy(17, 12); printf("|w");
+            gotoxy(17, 10); printf("| |");
+            gotoxy(17, 11); printf("| |");
+            gotoxy(17, 9); printf(" _");
         case 2: // Badan
-            gotoxy(18, 9); printf("|      |");
-            gotoxy(18, 10); printf("|     |");
-            gotoxy(18, 7); printf("|     |");
+            gotoxy(19, 10); printf("|   |");
+            gotoxy(19, 11); printf("|   |");
+            gotoxy(19, 12); printf("|___|");
 
         case 1: // Kepala
-            gotoxy(20, 6); printf("|___|");
-            gotoxy(19, 7); printf("");
-            break;
+            gotoxy(19, 7); printf("~+-+~");
+            gotoxy(19, 8); printf("|E V|");
+            gotoxy(19, 9); printf("|_^_|");
+            break;            break;
     }
 }
 
