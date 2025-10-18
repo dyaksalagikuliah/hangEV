@@ -145,6 +145,10 @@ void drawHangman(int wrongGuesses) {
     gotoxy(5, 3); printf("||==============T================");
     
     gotoxy(21,4); printf("|");
+    gotoxy(21,5); printf("|");
+    gotoxy(21,6); printf("|");
+    gotoxy(21,7); printf("|");
+
 
     switch (wrongGuesses) {
         case 6: // Kaki kanan
