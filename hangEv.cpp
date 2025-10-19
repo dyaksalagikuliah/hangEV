@@ -131,6 +131,7 @@ void drawBox(int x1, int y1, int x2, int y2) {
  * Menggambar hangman sesuai dengan jumlah tebakan salah.
  */
 void drawHangman(int wrongGuesses) {
+	   drawBox(3, 2, 39, 29);
     // Bersihkan area hangman sebelum menggambar
     for(int i = 3; i < 15; i++){
         gotoxy(5, i);
@@ -138,49 +139,68 @@ void drawHangman(int wrongGuesses) {
     }
 
     // Tiang gantungan (selalu ada)
-    gotoxy(5, 18); printf("=================================");
-    for(int i = 3; i < 18; i++){
+    gotoxy(5, 27); printf("=================================");
+    for(int i = 10; i < 27; i++){
+    	gotoxy (5,i); printf("||");
     }
-    gotoxy(5, 3); printf("||==============T================");
+    gotoxy(5, 10); printf("||==============T================");
     
     
-    gotoxy(21,4); printf("|");
-    gotoxy(21,5); printf("|");
-    gotoxy(21,6); printf("|");
+    gotoxy(21,11); printf("|");
+    gotoxy(21,12); printf("|");
+    gotoxy(21,13); printf("|");
     // gotoxy(21,7); printf("|");
 
 
     switch (wrongGuesses) {
         case 6: // Kaki kanan
-            gotoxy(22, 13); printf(" |");
-            gotoxy(22, 14); printf(" |");
-            gotoxy(22, 15); printf("o|");
+        	 gotoxy(19, 14); printf("~+-+~");
+            gotoxy(19, 15); printf("|E V|");
+            gotoxy(19, 16); printf("|_^_|");
+            gotoxy(19, 17); printf("|   |");
+            gotoxy(19, 18); printf("|   |");
+            gotoxy(19, 19); printf("|___|");
+            gotoxy(17, 19); printf("|w");
+            gotoxy(17, 17); printf("| |");
+            gotoxy(17, 18); printf("| |");
+            gotoxy(17, 16); printf(" _");
+            gotoxy(17, 19); printf("|w");
+            gotoxy(17, 17); printf("| |");
+            gotoxy(17, 18); printf("| |");
+            gotoxy(17, 16); printf(" _");
+            gotoxy(19,20);printf("| |");
+            gotoxy(19,21);printf("| |");
+            gotoxy(19,22);printf("|o|");
+            gotoxy(22, 20); printf(" |");
+            gotoxy(22, 21); printf(" |");
+            gotoxy(22, 22); printf("o|");
             Sleep(1000);
         case 5: // Kaki kiri
-            gotoxy(19,13);printf("| |");
-            gotoxy(19,14);printf("| |");
-            gotoxy(19,15);printf("|o|");
+            gotoxy(19,20);printf("| |");
+            gotoxy(19,21);printf("| |");
+            gotoxy(19,22);printf("|o|");
             // Sleep(1000);
         case 4: // Tangan kanan
-            gotoxy(22, 12); printf("w|");
-            gotoxy(22, 10); printf("|");
-            gotoxy(22, 11); printf("|");
-            gotoxy(22, 9); printf("_");
+            gotoxy(22, 19); printf("  w|");
+            gotoxy(22, 17); printf("   |");
+            gotoxy(22, 18); printf("   |");
+            gotoxy(22, 16); printf("  _");
         case 3: // Tangan kiri
-            gotoxy(17, 12); printf("|w");
-            gotoxy(17, 10); printf("| |");
-            gotoxy(17, 11); printf("| |");
-            gotoxy(17, 9); printf(" _");
+            gotoxy(17, 19); printf("|w");
+            gotoxy(17, 17); printf("| |");
+            gotoxy(17, 18); printf("| |");
+            gotoxy(17, 16); printf(" _");
         case 2: // Badan
-            gotoxy(19, 10); printf("|   |");
-            gotoxy(19, 11); printf("|   |");
-            gotoxy(19, 12); printf("|___|");
+            gotoxy(19, 17); printf("|   |");
+            gotoxy(19, 18); printf("|   |");
+            gotoxy(19, 19); printf("|___|");
 
         case 1: // Kepala
-            gotoxy(19, 7); printf("~+-+~");
-            gotoxy(19, 8); printf("|E V|");
-            gotoxy(19, 9); printf("|_^_|");
+            gotoxy(19, 14); printf("~+-+~");
+            gotoxy(19, 15); printf("|E V|");
+            gotoxy(19, 16); printf("|_^_|");
             break;            break;
+        
     }
 }
 
@@ -258,71 +278,99 @@ void playGame(char** wordList, int wordCount) {
 
         // Loop untuk satu kata
         while (currentState.wrongGuesses < 6 && !wordGuessed) {
-            drawHangman(currentState.wrongGuesses);
+    drawHangman(currentState.wrongGuesses);
 
-            gotoxy(48, 15); printf(" "); // Posisi input
-            char guess = getch();
+    char guess = 0;   // huruf yang dipilih
+    char key = 0;     // tombol yang ditekan
 
-            if (guess == 27) { // Tombol ESC
-                int pauseChoice = showPauseMenu();
-                if (pauseChoice == 2) { // Pilih Exit
-                    showGameOverScreen(currentState.score);
-                    return; // Keluar dari fungsi playGame
-                }
-                // Jika pilih Continue, gambar ulang UI
-                drawInitialGameUI();
-                updateScore(currentState.score);
-                updateWrongChars(currentState.wrongChars);
-                updateWord(currentState.guessedWord);
-                continue;
+    // --- Tahap 1: Ambil input sampai ENTER ---
+    while (1) {
+        key = getch();
+
+        if (key == 27) { // ESC untuk pause
+            int pauseChoice = showPauseMenu();
+            if (pauseChoice == 2) {
+                showGameOverScreen(currentState.score);
+                return;
             }
-
-            if (!isalpha(guess)) continue; // Hanya proses input alfabet
-            guess = tolower(guess);
-
-            updateSelectedChar(toupper(guess)); // Tampilkan huruf yg dipilih
-            
-            // Cek apakah huruf sudah pernah ditebak
-            if (strchr(currentState.guessedWord, guess) || strchr(currentState.wrongChars, guess)) {
-                // Bisa ditambahkan pesan "Sudah ditebak" jika diinginkan
-                Sleep(500);
-                clearSelectedChar();
-                continue;
-            }
-
-            int letterFound = 0;
-            for (int i = 0; i < strlen(currentState.secretWord); i++) {
-                if (currentState.secretWord[i] == guess) {
-                    currentState.guessedWord[i] = guess;
-                    letterFound = 1;
-                }
-            }
-
-            if (!letterFound) {
-                int len = strlen(currentState.wrongChars);
-                if (len < 6) {
-                    currentState.wrongChars[len] = toupper(guess);
-                    currentState.wrongChars[len + 1] = '\0';
-                    currentState.wrongGuesses++;
-                    updateWrongChars(currentState.wrongChars);
-                }
-            }
-
+            // Refresh UI saat kembali
+            drawInitialGameUI();
+            updateScore(currentState.score);
+            updateWrongChars(currentState.wrongChars);
             updateWord(currentState.guessedWord);
-            
-            // Cek apakah kata sudah tertebak semua
-            if (strchr(currentState.guessedWord, '_') == NULL) {
-                wordGuessed = 1;
-            }
-            
-            Sleep(200);
-            clearSelectedChar();
-        } // Akhir loop satu kata
+            break;
+        }
+
+        if (isalpha(key)) {
+            guess = tolower(key);
+            // tampilkan di panel Select Character
+            updateSelectedChar(tolower(guess));
+        }
+
+        if (key == 13 && guess != 0) { // Enter ditekan
+            break; // lanjut proses huruf
+        }
+    }
+
+    // Kalau belum ada huruf valid, lanjut loop utama
+    if (guess == 0) continue;
+
+    // --- Tahap 2: Proses huruf yang sudah dikonfirmasi ---
+    // Cek apakah huruf sudah pernah ditebak salah
+    if (strchr(currentState.wrongChars, guess)) {
+        Sleep(100);
+        clearSelectedChar();
+        continue;
+    }
+
+    // Cek apakah huruf sudah benar-benar pernah ditebak
+    int alreadyGuessed = 0;
+    for (int i = 0; i < strlen(currentState.secretWord); i++) {
+        if (currentState.guessedWord[i] == guess) {
+            alreadyGuessed = 1;
+            break;
+        }
+    }
+    if (alreadyGuessed) {
+        Sleep(100);
+        clearSelectedChar();
+        continue;
+    }
+
+    // --- Tahap 3: Cek apakah huruf ada di kata ---
+    int letterFound = 0;
+    for (int i = 0; i < strlen(currentState.secretWord); i++) {
+        if (currentState.secretWord[i] == guess) {
+            currentState.guessedWord[i] = guess;
+            letterFound = 1;
+        }
+    }
+
+    if (!letterFound) {
+        int len = strlen(currentState.wrongChars);
+        if (len < 6) {
+            currentState.wrongChars[len] = tolower(guess);
+            currentState.wrongChars[len + 1] = '\0';
+            currentState.wrongGuesses++;
+            updateWrongChars(currentState.wrongChars);
+        }
+    }
+
+    updateWord(currentState.guessedWord);
+
+    // --- Tahap 4: Cek apakah kata sudah selesai ---
+    if (strchr(currentState.guessedWord, '_') == NULL) {
+        wordGuessed = 1;
+    }
+
+    Sleep(200);
+    clearSelectedChar();
+}
+// Akhir loop satu kata
 
         // Setelah loop satu kata selesai
         if (wordGuessed) {
-            currentState.score += 10; // Tambah skor
-            showRoundWinMessage(currentState.secretWord);
+            currentState.score += 1; // Tambah skor
             // Permainan akan otomatis lanjut ke ronde berikutnya (loop while(1))
         } else {
             // Jika kalah
@@ -418,10 +466,13 @@ void freeWords(char** words, int wordCount) {
  * Menampilkan seni ASCII untuk layar pause.
  */
 void showPauseScreenArt() {
-    gotoxy(15, 5); printf(" ____   __   _  _  ____  ____ ");
-    gotoxy(15, 6); printf("(  _ \\ / _\\ ( \\/ )( ___)(  _ \\");
-    gotoxy(15, 7); printf(" ) __//    \\/ \\/ \\ )__)  )   /");
-    gotoxy(15, 8); printf("(__)  \\_/\\_/\\_)(_/(____)(__\\_)");
+    gotoxy(15, 2); printf(".______      ___      __    __       _______. _______");
+    gotoxy(15, 3); printf("|   _  \\    /   \\    |  |  |  |     /       ||   ____|");
+    gotoxy(15, 4); printf("|  |_)  |  /  ^  \\   |  |  |  |    |   (----`|  |__");
+    gotoxy(15, 5); printf("|   ___/  /  /_\\  \\  |  |  |  |     \\   \\    |   __|");
+    gotoxy(15, 6); printf("|  |     /  _____  \\ |  `--'  | .----)   |   |  |____");
+    gotoxy(15, 7); printf("| _|    /__/     \\__\\ \\______/  |_______/    |_______|");
+
 }
 
 
@@ -464,11 +515,12 @@ int showPauseMenu() {
 void showGameOverScreen(int finalScore) {
     system("cls");
     setConsoleColor(12); // Merah
-    gotoxy(10, 5); printf("  ____    _    __  __  ____    ____   _   _  ____  ____  ");
-    gotoxy(10, 6); printf(" / ___|  / \\  |  \\/  |/ ___|  / ___| | | | |/ ___||  _ \\ ");
-    gotoxy(10, 7); printf("| |  _  / _ \\ | |\\/| | |  _  | |   | | | | | |  _ | |_) |");
-    gotoxy(10, 8); printf("| |_| |/ ___ \\| |  | | |_| | | |___| | |_| | |_| ||  _ < ");
-    gotoxy(10, 9); printf(" \\____/_/   \\_\\_|  |_|\\____|  \\____|  \\___/ \\____||_| \\_\\");
+    gotoxy(10, 5); printf("  _______      ___      .___  ___.  _______   ______   ____    ____  _______ .______");
+    gotoxy(10, 6); printf(" /  _____|    /   \\     |   \\/   | |   ____| /  __  \\  \\   \\  /   / |   ____||   _  \\");
+    gotoxy(10, 7); printf("|  |  __     /  ^  \\    |  \\  /  | |  |__   |  |  |  |  \\   \\/   /  |  |__   |  |_)  |");
+    gotoxy(10, 8); printf("|  | |_ |   /  /_\\  \\   |  |\\/|  | |   __|  |  |  |  |   \\      /   |   __|  |      /");
+    gotoxy(10, 9); printf("|  |__| |  /  _____  \\  |  |  |  | |  |____ |  `--'  |    \\    /    |  |____ |  |\\  \\----.");
+    gotoxy(10,10); printf(" \\______| /__/     \\__\\ |__|  |__| |_______| \\______/      \\__/     |_______|| _| `._____|");
     
     setConsoleColor(15);
     gotoxy(30, 12);
@@ -499,7 +551,7 @@ void updateWord(const char* word) {
     printf("                "); // Clear previous
     gotoxy(45, 16);
     for(int i = 0; i < strlen(word); i++){
-        printf("%c ", toupper(word[i]));
+        printf("%c ", tolower(word[i]));
     }
 }
 
@@ -513,11 +565,4 @@ void clearSelectedChar(){
     printf(" ");
 }
 
-void showRoundWinMessage(const char* secretWord) {
-    gotoxy(5, 16);
-    setConsoleColor(10);
-    printf("Selamat! Anda menebak kata: %s", secretWord);
-    setConsoleColor(15);
-    Sleep(2000); // Tampilkan pesan selama 2 detik
-}
 
