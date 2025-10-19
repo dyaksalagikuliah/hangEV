@@ -193,11 +193,22 @@ int showMainMenu() {
 
     while (1) {
         system("cls");
-        setConsoleColor(15); // Putih
-        gotoxy(35, 8);
-        printf("H A N G E V");
-        gotoxy(32, 9);
-        printf("=====================");
+        setConsoleColor(14); // Putih
+        gotoxy(15, 2);
+        printf(" __    __       ___      .__   __.   _______  ___________    ____");
+        gotoxy(15,3);
+        printf("|  |  |  |     /   \\     |  \\ |  |  /  _____||   ____\\   \\  /   /");
+        gotoxy(15,4);
+        printf("|  |__|  |    /  ^  \\    |   \\|  | |  |  __  |  |__   \\   \\/   /");
+        gotoxy(15,5);
+        printf("|   __   |   /  /_\\  \\   |  . `  | |  | |_ | |   __|   \\      /");
+        gotoxy(15,6);
+        printf("|  |  |  |  /  _____  \\  |  |\\   | |  |__| | |  |____   \\    /");
+        gotoxy(15,7);
+        printf("|__|  |__| /__/     \\__\\ |__| \\__|  \\______| |_______|   \\__/");
+
+        gotoxy(15, 9);
+        printf("=============================================================");
 
         gotoxy(32, 11);
         setConsoleColor(selection == 1 ? 10 : 15); // Hijau terang jika dipilih
